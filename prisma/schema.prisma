@@ -14,10 +14,23 @@ model Message {
     authorNumber    String @db.Text()
     authorName      String @db.Text()
     deviceType      String @db.Text()
-    type            String @db.Text()
-    body            String?
+    body            String
     hasMedia        Boolean
     hasQuoteMsg     Boolean    
 
     @@map("messages")
+}
+
+model Sticker {
+    id              Int       @id @default(autoincrement())
+    createdAt       DateTime  @default(now()) @map("create_time") @db.Timestamp(0)
+
+    authorNumber    String @db.Text()
+    authorName      String @db.Text()
+    deviceType      String @db.Text()
+    mediaKey        String
+    stickerSize     String
+    hasQuoteMsg     Boolean    
+
+    @@map("stickers")
 }
