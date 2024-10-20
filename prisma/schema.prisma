@@ -7,30 +7,154 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Message {
-    id              Int       @id @default(autoincrement())
-    createdAt       DateTime  @default(now()) @map("create_time") @db.Timestamp(0)
+model Quotes {
+    id              Int         @id @default(autoincrement())
+    messageQuotting String
+    messageQuotted  String
 
-    authorNumber    String @db.Text()
-    authorName      String @db.Text()
-    deviceType      String @db.Text()
-    body            String
+    @@map("quotes")
+}
+
+model Text {
+    id              String      @id 
+    createdAt       DateTime    @default(now()) @map("create_time") @db.Timestamp(0)
+
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+    deviceType      String      @db.Text()
+    body            String      @db.LongText()
     hasMedia        Boolean
-    hasQuoteMsg     Boolean    
+    hasQuoteMsg     Boolean
 
-    @@map("messages")
+    @@map("texts")
 }
 
 model Sticker {
-    id              Int       @id @default(autoincrement())
-    createdAt       DateTime  @default(now()) @map("create_time") @db.Timestamp(0)
+    id              String      @id
+    createdAt       DateTime    @default(now()) @map("create_time") @db.Timestamp(0)
 
-    authorNumber    String @db.Text()
-    authorName      String @db.Text()
-    deviceType      String @db.Text()
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+    deviceType      String      @db.Text()
     mediaKey        String
-    stickerSize     String
+    stickerSize     Int
     hasQuoteMsg     Boolean    
 
     @@map("stickers")
+}
+
+model Audio {
+    id              String      @id
+    createdAt       DateTime    @default(now()) @map("create_time") @db.Timestamp(0)
+
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+    deviceType      String      @db.Text()
+    duration        String
+    hasQuoteMsg     Boolean    
+
+    @@map("audios")
+}
+
+model Voice {
+    id              String      @id
+    createdAt       DateTime    @default(now()) @map("create_time") @db.Timestamp(0)
+
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+    deviceType      String      @db.Text()
+    duration        String
+    hasQuoteMsg     Boolean
+    isViewOnce      Boolean    
+
+    @@map("voices")
+}
+
+model Poll {
+    id              String      @id
+    createdAt       DateTime    @default(now()) @map("create_time") @db.Timestamp(0)
+
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+    deviceType      String      @db.Text()
+    pollName        String
+    pollOptions     PollOption[]
+    pollVotes       PollVote[]
+    hasQuoteMsg     Boolean    
+
+    @@map("polls")
+}
+
+model PollOption {
+    id              Int         @id @default(autoincrement())
+    pollId          String
+    poll            Poll        @relation(fields: [pollId], references: [id], onDelete: Cascade, map: "fk_polls_polloptions")
+    title           String
+
+    @@map("poll_options")
+}
+
+model PollVote {
+    id              Int         @id @default(autoincrement())
+    pollId          String
+    poll            Poll        @relation(fields: [pollId], references: [id], onDelete: Cascade, map: "fk_polls_pollvotes")
+    voteTitle       String
+    voterNumber     String
+
+    @@map("poll_votes")
+}
+
+model Image {
+    id              String      @id
+    createdAt       DateTime    @default(now()) @map("create_time") @db.Timestamp(0)
+
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+    deviceType      String      @db.Text()
+    size            Int
+    hasQuoteMsg     Boolean    
+    isViewOnce      Boolean
+
+    @@map("images")
+}
+
+model Video {
+    id              String      @id
+    createdAt       DateTime    @default(now()) @map("create_time") @db.Timestamp(0)
+
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+    deviceType      String      @db.Text()
+    duration        String
+    size            Int
+    hasQuoteMsg     Boolean    
+    isViewOnce      Boolean
+
+    @@map("videos")
+}
+
+model Document {
+    id              String      @id
+    createdAt       DateTime    @default(now()) @map("create_time") @db.Timestamp(0)
+
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+    deviceType      String      @db.Text()
+    size            Int
+    name            String
+    hasQuoteMsg     Boolean    
+
+    @@map("documents")
+}
+
+model Revoked {
+    id              String      @id 
+    deletedAt       DateTime    @default(now()) @map("delete_time") @db.Timestamp(0)
+
+    authorNumber    String      @db.Text()
+    authorName      String      @db.Text()
+    deviceType      String      @db.Text()
+    type            String      
+
+    @@map("revokeds")
 }
