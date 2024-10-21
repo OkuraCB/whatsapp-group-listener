@@ -1,0 +1,5 @@
+node_modules
+authData
+.wwebjs_cache
+.env
+stickers
