@@ -67,7 +67,9 @@ client.on("message_create", async (msg) => {
         break;
 
       case "!py":
-        await chat.sendMessage("https://github.com/1sa4c/pyzzachat");
+        await chat.sendMessage(
+          "https://github.com/1sa4c/pyzzachat\nAcesse já utilizando o arquivo `main.py` dentro de `client` no IP arthurtv.duckdns.org e porta 10004!"
+        );
         break;
 
       case "!src":
