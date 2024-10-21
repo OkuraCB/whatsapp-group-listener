@@ -10,7 +10,7 @@ interface pollOption {
 }
 
 let flag = 1;
-const commands = ["!everyone", "!online", "!py", "!src", "!help"];
+const commands = ["!everyone", "!online", "!py", "!src", "!help", "!minecraft"];
 
 const prisma = new PrismaClient();
 
@@ -72,6 +72,12 @@ client.on("message_create", async (msg) => {
       case "!py":
         await chat.sendMessage(
           "https://github.com/1sa4c/pyzzachat\nAcesse já utilizando o arquivo `main.py` dentro de `client` no IP arthurtv.duckdns.org e porta 10004!"
+        );
+        break;
+
+      case "!minecraft":
+        await chat.sendMessage(
+          "Então você quer entrar no servidor do Xurso de Minecraft? Aqui vão as informações:\n- Minecraft 1.21.1;\n- IP: `arthurtv.duckdns.org`;\n- Porta (para Minecraft Java): `25565`;\n- Porta (para Minecraft Bedrock): `19132`"
         );
         break;
 
