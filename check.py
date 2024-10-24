@@ -17,7 +17,7 @@ def ping_host():
             icn = Image.new("RGB", (32, 32), (0, 255, 0))
         
         icon.icon = icn
-        time.sleep(5)
+        time.sleep(600)
 
 icon = pystray.Icon('ping', icon=Image.new("RGB", (32, 32), (255, 255, 255)))
 
