@@ -15,9 +15,6 @@ const commands = ["!everyone", "!online", "!py", "!src", "!help", "!minecraft"];
 const prisma = new PrismaClient();
 
 const client = new Client({
-  puppeteer: {
-    args: ["--no-sandbox"],
-  },
   authStrategy: new LocalAuth({ dataPath: "authData" }),
 });
 
