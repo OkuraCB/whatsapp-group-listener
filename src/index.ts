@@ -16,6 +16,7 @@ const prisma = new PrismaClient();
 
 const client = new Client({
   authStrategy: new LocalAuth({ dataPath: "authData" }),
+  puppeteer: { args: ["--no-sandbox"] },
 });
 
 client.initialize();
