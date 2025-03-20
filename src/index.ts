@@ -74,7 +74,7 @@ client.on("message_create", async (msg) => {
 
       case "!minecraft":
         await chat.sendMessage(
-          "Então você quer entrar no servidor do Xurso de Minecraft? Aqui vão as informações:\n- Minecraft 1.21.1;\n- IP: `arthurtv.duckdns.org`;\n- Porta (para Minecraft Java): `25565`;\n- Porta (para Minecraft Bedrock): `19132`"
+          "Então você quer entrar no servidor do Xurso de Minecraft? Aqui vão as informações:\n- Minecraft 1.21.4;\n- IP: `arthurtv.duckdns.org`;\n- Porta (para Minecraft Java): `25565`;\n- Porta (para Minecraft Bedrock): `19132`"
         );
         break;
 
