@@ -94,25 +94,24 @@ client.on("message_create", async (msg) => {
         break;
 
       default:
-        if (/^!everyone\s.+/.test(msg.body) && chat.isGroup) {
-          const people = (chat as GroupChat).participants;
-
-          let text = "";
-          let mentions: string[] = [];
-
-          for (const person of people) {
-            mentions.push(`${person.id.user}@c.us`);
-            text += `@${person.id.user} `;
-          }
-
-          await chat.sendMessage(text, {
-            mentions,
-            quotedMessageId: msg.id.id,
-          });
-        }
-
         break;
     }
+  } else if (/^!everyone\s.+/.test(msg.body) && chat.isGroup) {
+    flag = 1;
+    const people = (chat as GroupChat).participants;
+
+    let text = "";
+    let mentions: string[] = [];
+
+    for (const person of people) {
+      mentions.push(`${person.id.user}@c.us`);
+      text += `@${person.id.user} `;
+    }
+
+    await chat.sendMessage(text, {
+      mentions,
+      quotedMessageId: msg.id.id,
+    });
   } else {
     if (chat.isGroup && (chat as GroupChat).id.user === process.env.GROUP_ID) {
       const author = await msg.getContact();
