@@ -108,10 +108,7 @@ client.on("message_create", async (msg) => {
       text += `@${person.id.user} `;
     }
 
-    await chat.sendMessage(text, {
-      mentions,
-      quotedMessageId: msg.id.id,
-    });
+    await msg.reply(text, undefined, { mentions });
   } else {
     if (chat.isGroup && (chat as GroupChat).id.user === process.env.GROUP_ID) {
       const author = await msg.getContact();
