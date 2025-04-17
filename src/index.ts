@@ -94,7 +94,7 @@ client.on("message_create", async (msg) => {
         break;
 
       default:
-        if (/^!everyone.+$/.test(msg.body) && chat.isGroup) {
+        if (/^!everyone\s.+/.test(msg.body) && chat.isGroup) {
           const people = (chat as GroupChat).participants;
 
           let text = "";
