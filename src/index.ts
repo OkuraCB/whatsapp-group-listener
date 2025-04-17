@@ -94,6 +94,23 @@ client.on("message_create", async (msg) => {
         break;
 
       default:
+        if (/^!everyone.+$/.test(msg.body) && chat.isGroup) {
+          const people = (chat as GroupChat).participants;
+
+          let text = "";
+          let mentions: string[] = [];
+
+          for (const person of people) {
+            mentions.push(`${person.id.user}@c.us`);
+            text += `@${person.id.user} `;
+          }
+
+          await chat.sendMessage(text, {
+            mentions,
+            quotedMessageId: msg.id.id,
+          });
+        }
+
         break;
     }
   } else {
