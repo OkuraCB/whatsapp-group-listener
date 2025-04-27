@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { execSync } from "child_process";
 import { flatten } from "flat";
 import fs from "fs";
 import qrcode from "qrcode-terminal";
@@ -64,6 +65,11 @@ client.on("message_create", async (msg) => {
         break;
 
       case "!online":
+        const stdout = execSync("uptime");
+        const status = String(stdout);
+
+        console.log(status);
+
         await chat.sendMessage("🤖 100% online chefe 🤖");
         break;
 
