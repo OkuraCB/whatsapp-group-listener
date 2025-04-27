@@ -73,7 +73,7 @@ client.on("message_create", async (msg) => {
         if (result[4] == "days,") {
           const hours = result[5].split(":");
           chat.sendMessage(
-            `🤖 100% online chefe 🤖\n> ${result[4]} dias, ${
+            `🤖 100% online chefe 🤖\n> ${result[3]} dias, ${
               hours[0]
             } horas e ${hours[1].split(",")[0]} minutos`
           );
@@ -86,7 +86,6 @@ client.on("message_create", async (msg) => {
           );
         }
 
-        await chat.sendMessage("🤖 100% online chefe 🤖");
         break;
 
       case "!py":
