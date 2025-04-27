@@ -69,12 +69,22 @@ client.on("message_create", async (msg) => {
         const status = String(stdout);
 
         const result = status.split(" ", 6);
-        console.log(result[0] + "-");
-        console.log(result[1] + "-");
-        console.log(result[2] + "-");
-        console.log(result[3] + "-");
-        console.log(result[4] + "-");
-        console.log(result[5] + "-");
+
+        if (result[4] == "days,") {
+          const hours = result[5].split(":");
+          chat.sendMessage(
+            `🤖 100% online chefe 🤖\n> ${result[4]} dias, ${
+              hours[0]
+            } horas e ${hours[1].split(",")[0]} minutos`
+          );
+        } else {
+          const hours = result[3].split(":");
+          chat.sendMessage(
+            `🤖 100% online chefe 🤖\n> ${hours[0]} horas e ${
+              hours[1].split(",")[0]
+            } minutos`
+          );
+        }
 
         await chat.sendMessage("🤖 100% online chefe 🤖");
         break;
