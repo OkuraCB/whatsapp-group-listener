@@ -11,6 +11,7 @@ interface pollOption {
 }
 
 let flag = 1;
+let commandCount = 1;
 const commands = ["!everyone", "!online", "!py", "!src", "!help", "!minecraft"];
 
 const prisma = new PrismaClient();
@@ -62,6 +63,8 @@ client.on("message_create", async (msg) => {
 
           await chat.sendMessage(text, { mentions });
         }
+
+        commandCount++;
         break;
 
       case "!online":
@@ -73,9 +76,14 @@ client.on("message_create", async (msg) => {
         if (result[4] == "days,") {
           const hours = result[5].split(":");
           chat.sendMessage(
-            `🤖 100% online chefe 🤖\n> ${result[3]} dias, ${
-              hours[0]
-            } horas e ${hours[1].split(",")[0]} minutos`
+            `🤖 100% online chefe 🤖\n
+            Comandos realizados com sucesso:\n
+            > ${commandCount}\n
+            
+            Tempo ativo:\n
+            > ${result[3]} dias, ${hours[0]} horas e ${
+              hours[1].split(",")[0]
+            } minutos`
           );
         } else {
           const hours = result[3].split(":");
@@ -117,6 +125,8 @@ client.on("message_create", async (msg) => {
       default:
         break;
     }
+
+    commandCount++;
   } else if (/^!everyone\s.+/.test(msg.body) && chat.isGroup) {
     flag = 1;
     const people = (chat as GroupChat).participants;
@@ -130,6 +140,7 @@ client.on("message_create", async (msg) => {
     }
 
     await msg.reply(text, undefined, { mentions });
+    commandCount++;
   } else {
     if (chat.isGroup && (chat as GroupChat).id.user === process.env.GROUP_ID) {
       const author = await msg.getContact();
