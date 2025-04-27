@@ -76,14 +76,14 @@ client.on("message_create", async (msg) => {
         if (result[4] == "days,") {
           const hours = result[5].split(":");
           chat.sendMessage(
-            `🤖 100% online chefe 🤖\nComandos realizados com sucesso:\n> ${commandCount}\nTempo ativo:\n> ${
+            `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${
               result[3]
             } dias, ${hours[0]} horas e ${hours[1].split(",")[0]} minutos`
           );
         } else {
           const hours = result[3].split(":");
           chat.sendMessage(
-            `🤖 100% online chefe 🤖\nComandos realizados com sucesso:\n> ${commandCount}\nTempo ativo:\n> ${
+            `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${
               hours[0]
             } horas e ${hours[1].split(",")[0]} minutos`
           );
