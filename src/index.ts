@@ -80,6 +80,10 @@ client.on("message_create", async (msg) => {
               result[3]
             } dias, ${hours[0]} horas e ${hours[1].split(",")[0]} minutos`
           );
+        } else if (result[4] == "min,") {
+          chat.sendMessage(
+            `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${result[3]} minutos`
+          );
         } else {
           const hours = result[3].split(":");
           chat.sendMessage(
