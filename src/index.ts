@@ -68,7 +68,7 @@ client.on("message_create", async (msg) => {
         const stdout = execSync("uptime");
         const status = String(stdout);
 
-        const result = status.split("", 6);
+        const result = status.split(" ", 6);
         console.log(result[0] + "-");
         console.log(result[1] + "-");
         console.log(result[2] + "-");
