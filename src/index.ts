@@ -85,7 +85,7 @@ client.on("message_create", async (msg) => {
             `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${result[3]} minutos`
           );
         } else {
-          const hours = result[3].split(":");
+          const hours = result[4].split(":");
           chat.sendMessage(
             `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${
               hours[0]
