@@ -19,7 +19,7 @@ const commands = [
   "!src",
   "!help",
   "!minecraft",
-  "!remindme <minutos>",
+  "!remindme <tempo> <minutos|horas|dias>",
 ];
 
 const prisma = new PrismaClient();
@@ -154,17 +154,37 @@ client.on("message_create", async (msg) => {
   } else if (/^!remindme\s.+/.test(msg.body)) {
     flag = 1;
 
-    const arg = msg.body.split(" ")[1];
-
     try {
-      const time = parseInt(arg) * 60000;
+      const arg1 = msg.body.split(" ")[1];
+      const arg2 = msg.body.split(" ")[2];
+
+      let mult = 60000;
+
+      switch (arg2) {
+        case "minutos":
+          break;
+
+        case "horas":
+          mult *= 60;
+          break;
+
+        case "dias":
+          mult *= 60 * 24;
+          break;
+        default:
+          throw new Error();
+      }
+
+      const time = parseInt(arg1) * mult;
 
       setTimeout(() => {
         msg.reply("🤖Lembra disso aqui?🤖");
       }, time);
+
+      msg.reply("🤖Okay! Já te lembro!🤖");
     } catch (e) {
       msg.reply(
-        "Opa! Acho que sua sintaxe está errada.\n Tente escrever na forma `!remindme <minutos>`"
+        "Opa! Acho que sua sintaxe está errada.\n Tente escrever na forma `!remindme <tempo> <minutos|horas|dias>`"
       );
     }
   } else {
