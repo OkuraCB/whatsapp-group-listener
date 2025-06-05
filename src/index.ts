@@ -143,6 +143,22 @@ client.on("message_create", async (msg) => {
 
     await msg.reply(text, undefined, { mentions });
     commandCount++;
+  } else if (/^!remindme\s.+/.test(msg.body)) {
+    flag = 1;
+
+    const arg = msg.body.split(" ")[1];
+
+    try {
+      const time = parseInt(arg) * 60000;
+
+      setTimeout(() => {
+        msg.reply("Lembra disso aqui?");
+      }, time);
+    } catch (e) {
+      msg.reply(
+        "Opa! Acho que sua sintaxe está errada.\n Tente escrever na forma `!remindme <minutos>`"
+      );
+    }
   } else {
     if (chat.isGroup && (chat as GroupChat).id.user === process.env.GROUP_ID) {
       const author = await msg.getContact();
