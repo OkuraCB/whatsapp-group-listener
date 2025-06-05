@@ -12,7 +12,15 @@ interface pollOption {
 
 let flag = 1;
 let commandCount = 1;
-const commands = ["!everyone", "!online", "!py", "!src", "!help", "!minecraft"];
+const commands = [
+  "!everyone",
+  "!online",
+  "!py",
+  "!src",
+  "!help",
+  "!minecraft",
+  "!remindme <minutos>",
+];
 
 const prisma = new PrismaClient();
 
