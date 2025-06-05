@@ -152,7 +152,7 @@ client.on("message_create", async (msg) => {
       const time = parseInt(arg) * 60000;
 
       setTimeout(() => {
-        msg.reply("Lembra disso aqui?");
+        msg.reply("🤖Lembra disso aqui?🤖");
       }, time);
     } catch (e) {
       msg.reply(
