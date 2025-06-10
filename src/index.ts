@@ -79,7 +79,7 @@ client.on("message_create", async (msg) => {
         const stdout = execSync("uptime");
         const status = String(stdout);
 
-        const result = status.split(" ", 6);
+        const result = status.replace(/\s/g, " ").split(" ", 6);
 
         if (result[4] == "days," || result[4] == "day,") {
           const hours = result[5].split(":");
