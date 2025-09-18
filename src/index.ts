@@ -79,7 +79,7 @@ client.on("message_create", async (msg) => {
         const stdout = execSync("uptime");
         const status = String(stdout);
 
-        const result = status.replace(/\s/g, " ").split(" ", 6);
+        const result = status.replace(/\s+/g, " ").split(" ", 6);
 
         if (result[4] == "days," || result[4] == "day,") {
           const hours = result[5].split(":");
@@ -93,7 +93,7 @@ client.on("message_create", async (msg) => {
             `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${result[3]} minutos`
           );
         } else {
-          const hours = result[4].split(":");
+          const hours = result[3].split(":");
           chat.sendMessage(
             `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${
               hours[0]
@@ -110,12 +110,9 @@ client.on("message_create", async (msg) => {
         break;
 
       case "!minecraft":
-        // await chat.sendMessage(
-        //   "Então você quer entrar no servidor do Xurso de Minecraft? Aqui vão as informações:\n- Minecraft 1.21.4;\n- IP: `arthurtv.duckdns.org`;\n- Porta (para Minecraft Java): `25565`;\n- Porta (para Minecraft Bedrock): `19132`"
-        // );
         await chat.sendMessage(
-          "_Oh, that's unfortunate_\n\nEstamos em manutenção!"
-        );
+           "Então você quer entrar no servidor do Xurso de Minecraft? Aqui vão as informações:\n- Minecraft 1.21.6;\n- IP: `arthurtv.duckdns.org`;\n- Porta (para Minecraft Java): `25565`"
+	);
         break;
 
       case "!src":
@@ -393,7 +390,7 @@ client.on("message_create", async (msg) => {
 });
 
 client.on("vote_update", async (vote) => {
-  const voterNumber = vote.voter.split("@")[0];
+  /*const voterNumber = vote.voter.split("@")[0];
   const selectedOptions = vote.selectedOptions;
   const voterFound = await prisma.pollVote.findFirst({
     where: { voterNumber: voterNumber, pollId: vote.parentMessage.id.id },
@@ -415,7 +412,7 @@ client.on("vote_update", async (vote) => {
         poll: { connect: { id: vote.parentMessage.id.id } },
       },
     });
-  }
+  }*/
 });
 
 client.on("message_revoke_everyone", async (msg, rvk_msg) => {
