@@ -11,7 +11,7 @@ import { helpCommand } from "./commands/help";
 import { minecraftCommand, pyCommand, srcCommand } from "./commands/messages";
 import { onlineCommand } from "./commands/online";
 import { remindMeCommand, remindThisCommand } from "./commands/remind";
-import { getTags, tagCommand } from "./commands/tag";
+import { getTags, tagCommand, tagExists } from "./commands/tag";
 import { saveSticker } from "./utils/saveSticker";
 
 interface pollOption {
@@ -77,16 +77,12 @@ client.on("message_create", async (msg) => {
     else if (msg.body == "!mytags") await getTags(chat, msg, prisma);
 
     commandCount++;
-  } else if (/^everyone\s.+\s@.+/.test(msg.body) && chat.isGroup) {
-    flag = 1;
-
-    await everyoneTags(chat as GroupChat, msg, prisma);
-
-    commandCount++;
   } else if (/^!everyone\s.+/.test(msg.body) && chat.isGroup) {
     flag = 1;
 
-    await everyoneReply(chat as GroupChat, msg);
+    const check = await tagExists(msg, prisma);
+    if (check) await everyoneTags(chat as GroupChat, msg, prisma);
+    else await everyoneReply(chat as GroupChat, msg);
 
     commandCount++;
   } else if (/^!remindme\s.+/.test(msg.body)) {

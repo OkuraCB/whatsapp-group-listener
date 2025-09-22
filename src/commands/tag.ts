@@ -68,3 +68,15 @@ export const extractTag = (message: WAWebJS.Message) => {
 
   return tag.substring(0, tag.length - 1);
 };
+
+export const tagExists = async (
+  message: WAWebJS.Message,
+  prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
+) => {
+  const tag = extractTag(message);
+
+  const entries = await prisma.tag.findFirst({ where: { tag } });
+
+  if (!entries) return false;
+  return true;
+};
