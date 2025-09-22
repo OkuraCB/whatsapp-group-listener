@@ -21,7 +21,7 @@ export const tagCommand = async (
     for (let i = 1; i < tagParts.length; i++) {
       if (tagParts[i].startsWith("@")) break;
 
-      tag += tagParts[i];
+      tag += tagParts[i] + " ";
     }
 
     if (tag == "") throw new Error();
