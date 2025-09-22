@@ -1,9 +1,14 @@
 import { PrismaClient } from "@prisma/client";
-import { execSync } from "child_process";
 import { flatten } from "flat";
-import fs from "fs";
 import qrcode from "qrcode-terminal";
 import { Client, GroupChat, LocalAuth, MessageTypes } from "whatsapp-web.js";
+import { everyoneCommand, everyoneReply } from "./commands/everyone";
+import { helpCommand } from "./commands/help";
+import { minecraftCommand, pyCommand, srcCommand } from "./commands/messages";
+import { onlineCommand } from "./commands/online";
+import { remindMeCommand, remindThisCommand } from "./commands/remind";
+import { getTags, tagCommand } from "./commands/tag";
+import { saveSticker } from "./utils/saveSticker";
 
 interface pollOption {
   name: string;
@@ -20,6 +25,8 @@ const commands = [
   "!help",
   "!minecraft",
   "!remindme <tempo> <minutos|horas|dias>",
+  "!remindthis <tempo> <minutos|horas|dias>",
+  "!mytags",
 ];
 
 const prisma = new PrismaClient();
@@ -56,134 +63,40 @@ client.on("message_create", async (msg) => {
 
   if (commands.includes(msg.body)) {
     flag = 1;
-    switch (msg.body) {
-      case "!everyone":
-        if (chat.isGroup) {
-          const people = (chat as GroupChat).participants;
 
-          let text = "";
-          let mentions: string[] = [];
-
-          for (const person of people) {
-            mentions.push(`${person.id.user}@c.us`);
-            text += `@${person.id.user} `;
-          }
-
-          await chat.sendMessage(text, { mentions });
-        }
-
-        commandCount++;
-        break;
-
-      case "!online":
-        const stdout = execSync("uptime");
-        const status = String(stdout);
-
-        const result = status.replace(/\s+/g, " ").split(" ", 6);
-
-        if (result[4] == "days," || result[4] == "day,") {
-          const hours = result[5].split(":");
-          chat.sendMessage(
-            `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${
-              result[3]
-            } dias, ${hours[0]} horas e ${hours[1].split(",")[0]} minutos`
-          );
-        } else if (result[4] == "min,") {
-          chat.sendMessage(
-            `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${result[3]} minutos`
-          );
-        } else {
-          const hours = result[3].split(":");
-          chat.sendMessage(
-            `🤖 100% online chefe 🤖\n\nComandos realizados com sucesso:\n> ${commandCount}\n\nTempo ativo:\n> ${
-              hours[0]
-            } horas e ${hours[1].split(",")[0]} minutos`
-          );
-        }
-
-        break;
-
-      case "!py":
-        await chat.sendMessage(
-          "https://github.com/1sa4c/pyzzachat\nAcesse já utilizando o arquivo `main.py` dentro de `client` no IP arthurtv.duckdns.org e porta 9000!"
-        );
-        break;
-
-      case "!minecraft":
-        await chat.sendMessage(
-           "Então você quer entrar no servidor do Xurso de Minecraft? Aqui vão as informações:\n- Minecraft 1.21.6;\n- IP: `arthurtv.duckdns.org`;\n- Porta (para Minecraft Java): `25565`"
-	);
-        break;
-
-      case "!src":
-        await chat.sendMessage(
-          "https://github.com/OkuraCB/whatsapp-group-listener"
-        );
-        break;
-
-      case "!help":
-        let text = "Comandos válidos: ";
-        for (const command of commands) {
-          text += "\n- " + command;
-        }
-        await chat.sendMessage(text);
-        break;
-
-      default:
-        break;
-    }
+    if (msg.body == "!everyone") await everyoneCommand(chat as GroupChat);
+    else if (msg.body == "!online") await onlineCommand(chat, commandCount);
+    else if (msg.body == "!py") await pyCommand(chat);
+    else if (msg.body == "!src") await srcCommand(chat);
+    else if (msg.body == "!minecraft") await minecraftCommand(chat);
+    else if (msg.body == "!help") await helpCommand(chat, commands);
+    else if (msg.body == "!mytags") await getTags(chat, msg, prisma);
 
     commandCount++;
   } else if (/^!everyone\s.+/.test(msg.body) && chat.isGroup) {
     flag = 1;
-    const people = (chat as GroupChat).participants;
 
-    let text = "";
-    let mentions: string[] = [];
+    await everyoneReply(chat as GroupChat, msg);
 
-    for (const person of people) {
-      mentions.push(`${person.id.user}@c.us`);
-      text += `@${person.id.user} `;
-    }
-
-    await msg.reply(text, undefined, { mentions });
     commandCount++;
   } else if (/^!remindme\s.+/.test(msg.body)) {
     flag = 1;
 
-    try {
-      const arg1 = msg.body.split(" ")[1];
-      const arg2 = msg.body.split(" ")[2];
+    await remindMeCommand(msg);
 
-      let mult = 60000;
+    commandCount++;
+  } else if (/^!remindthis\s.+/.test(msg.body)) {
+    flag = 1;
 
-      switch (arg2) {
-        case "minutos":
-          break;
+    await remindThisCommand(msg);
 
-        case "horas":
-          mult *= 60;
-          break;
+    commandCount++;
+  } else if (/^!tag\s.+\s.+/.test(msg.body)) {
+    flag = 1;
 
-        case "dias":
-          mult *= 60 * 24;
-          break;
-        default:
-          throw new Error();
-      }
+    await tagCommand(chat, msg, prisma);
 
-      const time = parseInt(arg1) * mult;
-
-      setTimeout(() => {
-        msg.reply("🤖Lembra disso aqui?🤖");
-      }, time);
-
-      msg.reply("🤖Okay! Já te lembro!🤖");
-    } catch (e) {
-      msg.reply(
-        "Opa! Acho que sua sintaxe está errada.\n Tente escrever na forma `!remindme <tempo> <minutos|horas|dias>`"
-      );
-    }
+    commandCount++;
   } else {
     if (chat.isGroup && (chat as GroupChat).id.user === process.env.GROUP_ID) {
       const author = await msg.getContact();
@@ -213,21 +126,7 @@ client.on("message_create", async (msg) => {
           break;
 
         case MessageTypes.STICKER:
-          if (!fs.existsSync("stickers")) fs.mkdirSync("stickers");
-
-          const sticker = await msg.downloadMedia();
-          const data = sticker.data.replace(/^data:image\/\w+;base64,/, "");
-
-          const buffer = Buffer.from(data, "base64");
-          const foundSticker = fs.existsSync(
-            "stickers/" + msg.mediaKey + ".png"
-          );
-
-          if (!foundSticker)
-            fs.writeFileSync(
-              "stickers/" + msg.mediaKey?.replace(/[/]/g, ".") + ".png",
-              buffer
-            );
+          const sticker = await saveSticker(msg);
 
           await prisma.sticker.create({
             data: {
@@ -387,32 +286,6 @@ client.on("message_create", async (msg) => {
       }
     }
   }
-});
-
-client.on("vote_update", async (vote) => {
-  /*const voterNumber = vote.voter.split("@")[0];
-  const selectedOptions = vote.selectedOptions;
-  const voterFound = await prisma.pollVote.findFirst({
-    where: { voterNumber: voterNumber, pollId: vote.parentMessage.id.id },
-  });
-
-  if (voterFound)
-    await prisma.pollVote.deleteMany({
-      where: {
-        voterNumber: voterNumber,
-        pollId: vote.parentMessage.id.id,
-      },
-    });
-
-  for (const option of selectedOptions) {
-    await prisma.pollVote.create({
-      data: {
-        voteTitle: option.name,
-        voterNumber: voterNumber,
-        poll: { connect: { id: vote.parentMessage.id.id } },
-      },
-    });
-  }*/
 });
 
 client.on("message_revoke_everyone", async (msg, rvk_msg) => {
