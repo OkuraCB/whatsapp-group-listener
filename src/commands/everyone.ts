@@ -1,6 +1,7 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { DefaultArgs } from "@prisma/client/runtime/library";
 import WAWebJS, { GroupChat } from "whatsapp-web.js";
+import { extractTag } from "./tag";
 
 export const everyoneCommand = async (chat: GroupChat) => {
   if (chat.isGroup) {
@@ -41,7 +42,7 @@ export const everyoneTags = async (
   prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
 ) => {
   try {
-    const tag = message.body.split(" ")[1];
+    const tag = extractTag(message);
     const tagged = (await prisma.tag.findMany({ where: { tag: tag } })).map(
       (value) => value.user
     );
