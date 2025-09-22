@@ -40,16 +40,21 @@ export const everyoneTags = async (
   message: WAWebJS.Message,
   prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
 ) => {
-  const tag = message.body.split(" ")[1];
-  const people = await prisma.tag.findMany({ where: { tag: tag } });
+  try {
+    const tag = message.body.split(" ")[1];
+    const people = await prisma.tag.findMany({ where: { tag: tag } });
 
-  let text = "";
-  let mentions: string[] = [];
+    let text = "";
+    let mentions: string[] = [];
 
-  for (const person of people) {
-    mentions.push(`${person}@c.us`);
-    text += `@${person} `;
+    for (const person of people) {
+      mentions.push(`${person}@c.us`);
+      text += `@${person} `;
+    }
+
+    await chat.sendMessage(text, { mentions });
+  } catch (e) {
+    console.log(e);
+    await chat.sendMessage("🤖Oops! Algo deu errado!🤖");
   }
-
-  await chat.sendMessage(text, { mentions });
 };

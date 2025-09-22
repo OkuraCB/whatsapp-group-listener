@@ -31,9 +31,9 @@ export const tagCommand = async (
       });
     }
 
-    chat.sendMessage("🤖Tags atribuídas com sucesso!🤖");
+    await chat.sendMessage("🤖Tags atribuídas com sucesso!🤖");
   } catch (e) {
-    chat.sendMessage("🤖Oops! Algo deu errado!🤖");
+    await chat.sendMessage("🤖Oops! Algo deu errado!🤖");
   }
 };
 
@@ -50,8 +50,8 @@ export const getTags = async (
 
     for (const tag of tags) text += `- ${tag.tag}\n`;
 
-    chat.sendMessage(text);
+    await chat.sendMessage(text);
   } catch (e) {
-    chat.sendMessage("🤖Oops! Algo deu errado!🤖");
+    await chat.sendMessage("🤖Oops! Algo deu errado!🤖");
   }
 };
