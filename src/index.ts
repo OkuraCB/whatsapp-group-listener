@@ -2,7 +2,11 @@ import { PrismaClient } from "@prisma/client";
 import { flatten } from "flat";
 import qrcode from "qrcode-terminal";
 import { Client, GroupChat, LocalAuth, MessageTypes } from "whatsapp-web.js";
-import { everyoneCommand, everyoneReply } from "./commands/everyone";
+import {
+  everyoneCommand,
+  everyoneReply,
+  everyoneTags,
+} from "./commands/everyone";
 import { helpCommand } from "./commands/help";
 import { minecraftCommand, pyCommand, srcCommand } from "./commands/messages";
 import { onlineCommand } from "./commands/online";
@@ -76,7 +80,9 @@ client.on("message_create", async (msg) => {
   } else if (/^!everyone\s.+/.test(msg.body) && chat.isGroup) {
     flag = 1;
 
-    await everyoneReply(chat as GroupChat, msg);
+    const splits = msg.body.split(" ").length;
+    if (splits == 2) await everyoneTags(chat as GroupChat, msg, prisma);
+    else await everyoneReply(chat as GroupChat, msg);
 
     commandCount++;
   } else if (/^!remindme\s.+/.test(msg.body)) {
