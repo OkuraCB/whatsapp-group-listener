@@ -54,8 +54,8 @@ export const everyoneTags = async (
     let mentions: string[] = [];
 
     for (const person of people) {
-      mentions.push(`${person}@c.us`);
-      text += `@${person} `;
+      mentions.push(`${person.id.user}@c.us`);
+      text += `@${person.id.user} `;
     }
 
     await chat.sendMessage(text, { mentions });
