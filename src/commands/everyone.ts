@@ -48,8 +48,8 @@ export const everyoneTags = async (
     let mentions: string[] = [];
 
     for (const person of people) {
-      mentions.push(`${person}@c.us`);
-      text += `@${person} `;
+      mentions.push(`${person.user}@c.us`);
+      text += `@${person.user} `;
     }
 
     await chat.sendMessage(text, { mentions });
