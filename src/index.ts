@@ -77,12 +77,16 @@ client.on("message_create", async (msg) => {
     else if (msg.body == "!mytags") await getTags(chat, msg, prisma);
 
     commandCount++;
+  } else if (/^everyone\s.+\s@.+/.test(msg.body) && chat.isGroup) {
+    flag = 1;
+
+    await everyoneTags(chat as GroupChat, msg, prisma);
+
+    commandCount++;
   } else if (/^!everyone\s.+/.test(msg.body) && chat.isGroup) {
     flag = 1;
 
-    const splits = msg.body.split(" ").length;
-    if (splits == 2) await everyoneTags(chat as GroupChat, msg, prisma);
-    else await everyoneReply(chat as GroupChat, msg);
+    await everyoneReply(chat as GroupChat, msg);
 
     commandCount++;
   } else if (/^!remindme\s.+/.test(msg.body)) {
