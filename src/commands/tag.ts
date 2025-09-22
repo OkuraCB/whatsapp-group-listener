@@ -48,7 +48,7 @@ export const getTags = async (
 
     const tags = await prisma.tag.findMany({ where: { user: author.id.user } });
 
-    for (const tag of tags) text += `- ${tag}\n`;
+    for (const tag of tags) text += `- ${tag.tag}\n`;
 
     chat.sendMessage(text);
   } catch (e) {
