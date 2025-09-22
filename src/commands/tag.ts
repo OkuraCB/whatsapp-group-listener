@@ -15,9 +15,18 @@ export const tagCommand = async (
 
     if (!contacts) throw new Error();
 
-    const tag = message.body.split(" ")[1];
+    const tagParts = message.body.split(" ");
+    let tag = "";
 
-    if (tag.startsWith("@")) throw new Error();
+    for (let i = 1; i < tagParts.length; i++) {
+      if (tagParts[i].startsWith("@")) break;
+
+      tag += tagParts[i];
+    }
+
+    if (tag == "") throw new Error();
+
+    tag.trim();
 
     for (const contact of contacts) {
       await prisma.tag.upsert({

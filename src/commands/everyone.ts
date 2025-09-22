@@ -42,14 +42,19 @@ export const everyoneTags = async (
 ) => {
   try {
     const tag = message.body.split(" ")[1];
-    const people = await prisma.tag.findMany({ where: { tag: tag } });
+    const tagged = (await prisma.tag.findMany({ where: { tag: tag } })).map(
+      (value) => value.user
+    );
+
+    const members = chat.participants;
+    const people = members.filter((value) => tagged.includes(value.id.user));
 
     let text = "";
     let mentions: string[] = [];
 
     for (const person of people) {
-      mentions.push(`${person.user}@c.us`);
-      text += `@${person.user} `;
+      mentions.push(`${person}@c.us`);
+      text += `@${person} `;
     }
 
     await chat.sendMessage(text, { mentions });
