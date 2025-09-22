@@ -22,9 +22,9 @@
   },
   "homepage": "https://github.com/OkuraCB/whatsapp-group-listener#readme",
   "dependencies": {
-    "@prisma/client": "^6.16.0",
+    "@prisma/client": "^6.16.2",
     "flat": "^6.0.1",
-    "prisma": "^6.16.0",
+    "prisma": "^6.16.2",
     "tsx": "^4.20.5",
     "whatsapp-web.js": "1.34.1"
   },
