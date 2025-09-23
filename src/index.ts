@@ -105,7 +105,14 @@ client.on("message_create", async (msg) => {
     commandCount++;
   } else {
     if (chat.isGroup && (chat as GroupChat).id.user === process.env.GROUP_ID) {
-      const author = await msg.getContact();
+      let author;
+
+      try {
+        author = await msg.getContact();
+      } catch (e) {
+        console.log(e);
+        author = { isMe: true, number: "5521971446787", pushname: "Arthur" };
+      }
 
       if (msg.hasQuotedMsg) {
         const quote = await msg.getQuotedMessage();

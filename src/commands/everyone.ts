@@ -5,7 +5,7 @@ import { extractTag } from "./tag";
 
 export const everyoneCommand = async (chat: GroupChat) => {
   if (chat.isGroup) {
-    const people = (chat as GroupChat).participants;
+    const people = chat.participants;
 
     let text = "";
     let mentions: string[] = [];
