@@ -24,13 +24,19 @@
   "dependencies": {
     "@prisma/client": "^6.16.2",
     "flat": "^6.0.1",
+    "path": "^0.12.7",
     "prisma": "^6.16.2",
     "tsx": "^4.20.5",
-    "whatsapp-web.js": "1.34.1"
+    "whatsapp-web.js": "1.34.7"
   },
   "devDependencies": {
     "@types/qrcode-terminal": "^0.12.2",
     "npm-check-updates": "^18.1.0",
     "qrcode-terminal": "^0.12.0"
+  },
+  "allowScripts": {
+    "prisma@6.19.3": true,
+    "esbuild@0.25.5": true,
+    "puppeteer@24.38.0": true
   }
 }
